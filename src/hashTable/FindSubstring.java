@@ -1,20 +1,21 @@
 package hashTable;
 
 import java.util.ArrayList;
+import java.util.HashSet;
 import java.util.List;
+import java.util.Set;
 
 public class FindSubstring {
 
     public static void main(String[] args) {
-        String[] words = {"word", "good", "best", "word"};
-        System.out.println(findSubstring("wordgoodgoodgoodbestword", words));
+        String[] words = {"bar","foo","the"};
+        System.out.println(findSubstring("barfoofoobarthefoobarman", words));
     }
 
     public static List<Integer> findSubstring(String s, String[] words) {
         List<Integer> indexes = new ArrayList<>();
-        List<String> concatWords = new ArrayList<>();
-        StringBuilder stringBuilder = null;
-        int countLap = 0;
+        Set<String> concatWords = new HashSet<>();
+         StringBuilder stringBuilder = null;
         for (int i = 0; i < words.length; i++) {
             stringBuilder = new StringBuilder();
             stringBuilder.append(words[i]);
@@ -24,12 +25,32 @@ public class FindSubstring {
                 }
             }
             concatWords.add(stringBuilder.toString());
+            stringBuilder = new StringBuilder();
+            stringBuilder.append(words[i]);
+            for (int j = words.length - 1; j >= 0; j--) {
+                if (i != j) {
+                    stringBuilder.append(words[j]);
+                }
+            }
+            concatWords.add(stringBuilder.toString());
+            stringBuilder = new StringBuilder();
+            stringBuilder.append(words[i]);
+            for (int j = words.length/2 - 1; j >= 0; j--) {
+                if (i != j) {
+                    stringBuilder.append(words[j]);
+                }
+            }
+            for (int j = words.length/2; j < words.length; j++) {
+                if (i != j) {
+                    stringBuilder.append(words[j]);
+                }
+            }
+            concatWords.add(stringBuilder.toString());
         }
-        System.out.println("words: " + concatWords);
-        for (int i = concatWords.size() - 1; i >= 0; i--) {
-            if (s.contains(concatWords.get(i))) {
-                System.out.println("word: " + concatWords.get(i) + ", index word: " + s.indexOf(concatWords.get(i)));
-                indexes.add(s.indexOf(concatWords.get(i)));
+
+        for (String outputWord : concatWords) {
+            if (s.contains(outputWord)) {
+                indexes.add(s.indexOf(outputWord));
             }
         }
         return indexes;
